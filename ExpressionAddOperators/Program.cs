@@ -27,7 +27,7 @@ LeetCode link: https://leetcode.com/problems/expression-add-operators/
 
 #region Solution
 
-Console.WriteLine(AddOperators("231", 6));
+Console.WriteLine(AddOperators("232", 8));
 static IList<string> AddOperators(string num, int target)
 {
     return Solve("", num, target);
