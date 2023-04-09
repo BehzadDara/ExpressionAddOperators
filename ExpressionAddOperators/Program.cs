@@ -30,11 +30,15 @@ LeetCode link: https://leetcode.com/problems/expression-add-operators/
 Console.WriteLine(AddOperators("231", 6));
 static IList<string> AddOperators(string num, int target)
 {
+    return Solve("", num, target);
+}
+static IList<string> Solve(string answer, string num, int target)
+{
     if (num.Length == 1)
     {
         if (int.Parse(num) == target)
         {
-            return new List<string> { num };
+            return new List<string> { answer };
         }
         return new List<string>();
     }
@@ -42,13 +46,19 @@ static IList<string> AddOperators(string num, int target)
     var result = new List<string>();
 
     var multiple = (int.Parse(num[0].ToString()) * int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
-    result.AddRange(AddOperators(multiple, target));
+    var multipleTmp = string.IsNullOrEmpty(answer) ? num[0].ToString() : answer;
+    result.AddRange(Solve(multipleTmp + "*" + num[1], multiple, target));
 
     var sum = (int.Parse(num[0].ToString()) + int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
-    result.AddRange(AddOperators(sum, target));
+    var sumTmp = string.IsNullOrEmpty(answer) ? num[0].ToString() : answer;
+    result.AddRange(Solve(sumTmp + "+" + num[1], sum, target));
 
-    var minus = (int.Parse(num[0].ToString()) - int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
-    result.AddRange(AddOperators(minus, target));
+    if (int.Parse(num[0].ToString()) - int.Parse(num[1].ToString()) >= 0)
+    {
+        var minus = (int.Parse(num[0].ToString()) - int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
+        var minusTmp = string.IsNullOrEmpty(answer) ? num[0].ToString() : answer;
+        result.AddRange(Solve(minusTmp + "-" + num[1], minus, target));
+    }
 
     return result;
 }
