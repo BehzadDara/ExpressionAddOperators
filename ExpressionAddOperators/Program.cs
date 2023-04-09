@@ -27,18 +27,28 @@ LeetCode link: https://leetcode.com/problems/expression-add-operators/
 
 #region Solution
 
-Console.WriteLine(AddOperators("232", 6));
+Console.WriteLine(AddOperators("231", 6));
 static IList<string> AddOperators(string num, int target)
 {
+    if (num.Length == 1)
+    {
+        if (int.Parse(num) == target)
+        {
+            return new List<string> { num };
+        }
+        return new List<string>();
+    }
+
     var result = new List<string>();
 
-    for (int i = 0; i < num.Length - 1; i++)
-    {
-        foreach (char c in new List<char> { '*', '+', '-' })
-        {
-            
-        }
-    }
+    var multiple = (int.Parse(num[0].ToString()) * int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
+    result.AddRange(AddOperators(multiple, target));
+
+    var sum = (int.Parse(num[0].ToString()) + int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
+    result.AddRange(AddOperators(sum, target));
+
+    var minus = (int.Parse(num[0].ToString()) - int.Parse(num[1].ToString())).ToString() + num[2..num.Length];
+    result.AddRange(AddOperators(minus, target));
 
     return result;
 }
